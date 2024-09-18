@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build": "next build",
+    "postinstall": "prisma generate",
     "dev": "next dev",
-    "build": "next build&& prisma generate",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.5.5",
