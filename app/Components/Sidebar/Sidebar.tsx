@@ -31,7 +31,7 @@ function Sidebar() {
   };
 
   return (
-    <SidebarStyled theme={theme} collapsed={collapsed}>
+    <SidebarStyled theme={theme} collapsed={Boolean(collapsed)}>
       <button className="toggle-nav" onClick={collapseMenu}>
         {collapsed ? bars : arrowLeft}
       </button>
@@ -82,7 +82,9 @@ function Sidebar() {
   );
 }
 
-const SidebarStyled = styled.nav<{ collapsed: boolean }>`
+const SidebarStyled = styled.nav.withConfig({
+  shouldForwardProp: (prop) => !['collapsed'].includes(prop),
+})<{ collapsed: boolean }>`
   position: relative;
   width: ${(props) => props.theme.sidebarWidth};
   background-color: ${(props) => props.theme.colorBg2};
