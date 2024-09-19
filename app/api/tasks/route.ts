@@ -5,15 +5,21 @@ import { NextResponse } from "next/server";
 // Create a new task
 export async function POST(req: Request) {
   try {
+    console.log("Received request at /api/tasks"); // Log request start
+
     const { userId } = auth();
+    console.log("User ID:", userId); // Log user authentication status
 
     if (!userId) {
+      console.log("User not authenticated"); // Log authentication failure
       return NextResponse.json({ error: "Unauthorized", status: 401 });
     }
 
     const { title, description, date, completed, important } = await req.json();
+    console.log("Received data:", { title, description, date }); // Log received data
 
     if (!title || !description || !date) {
+      console.log("Missing required fields"); // Log missing data
       return NextResponse.json({
         error: "Missing required fields",
         status: 400,
@@ -21,12 +27,15 @@ export async function POST(req: Request) {
     }
 
     if (title.length < 3) {
+      console.log("Title is too short"); // Log title validation failure
       return NextResponse.json({
         error: "Title must be at least 3 characters long",
         status: 400,
       });
     }
 
+    // Log before the database operation
+    console.log("Attempting to create task in the database...");
     const task = await prisma.task.create({
       data: {
         title,
@@ -37,10 +46,11 @@ export async function POST(req: Request) {
         userId,
       },
     });
+    console.log("Task created successfully:", task); // Log successful task creation
 
     return NextResponse.json(task);
   } catch (error) {
-    console.error("ERROR CREATING TASK: ", error);
+    console.error("ERROR CREATING TASK:", error); // Log error details
     return NextResponse.json({ error: "Error creating task", status: 500 });
   }
 }
